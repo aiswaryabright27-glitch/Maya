@@ -62,12 +62,20 @@ def test_open_application_focuses_found_window(monkeypatch: pytest.MonkeyPatch) 
         hwnd = 42
         title = "Calculator"
 
+    calls = 0
+
+    def list_windows():
+        nonlocal calls
+        calls += 1
+        return [{"hwnd": 1, "title": "Other"}] if calls == 1 else [{"hwnd": 42, "title": "Calculator"}]
+
     monkeypatch.setattr(apps.subprocess, "Popen", lambda *_args, **_kwargs: None)
     monkeypatch.setattr(apps.time, "sleep", lambda _seconds: None)
-    monkeypatch.setattr(apps, "find_window", lambda _query: FakeWindow())
+    monkeypatch.setattr(apps, "list_windows", list_windows)
     monkeypatch.setattr(apps, "focus_window", lambda hwnd: hwnd == 42)
 
     result = apps.open_application("calculator")
+    assert result["ok"] is True
     assert result["window_found"] == "Calculator"
     assert result["focused"] is True
 

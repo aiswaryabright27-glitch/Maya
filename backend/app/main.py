@@ -19,6 +19,7 @@ from app.agent.executor import AgentExecutor
 from app.agent.permissions import Level, PermissionEngine
 from app.agent.registry import ToolRegistry
 from app.agent.router import route
+from app.agent.replies import spoken_report
 from app.agent.tools import register_builtin_tools
 from app.computer.computer_tools import register_computer_tools
 
@@ -154,9 +155,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 if routed.kind == "tool" and routed.tool:
                     yield send("status", value=f"Running: {routed.summary}")
                     task = await application.state.agent_executor.run_command(routed, provenance="voice")
-                    reply_text = task.report
+                    reply_text, reply_lang = spoken_report(routed, task, routed.reply_language or output_language)
                     yield send("assistant_final", text=reply_text)
-                    pending_tts = application.state.speech.synthesize(reply_text, output_language)
+                    pending_tts = application.state.speech.synthesize(reply_text, reply_lang)
                     async for chunk in pending_tts:
                         if cancellation.cancelled:
                             return

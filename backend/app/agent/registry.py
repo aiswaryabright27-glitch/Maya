@@ -99,12 +99,19 @@ class ToolRegistry:
                               evidence="validated only; nothing executed")
         start = time.perf_counter()
         try:
+            # Run the handler exactly ONCE, off the event loop. (The old code called the
+            # handler directly and then again in a thread, so every tool ran twice.)
             result = await asyncio.wait_for(asyncio.to_thread(_call_sync, tool.handler, args), timeout=tool.timeout)
             if inspect.isawaitable(result):
                 result = await asyncio.wait_for(result, timeout=tool.timeout)
             if not isinstance(result, dict):
                 result = {"value": result}
             elapsed = (time.perf_counter() - start) * 1000
+            if result.get("ok") is False:
+                # A tool that returns {"ok": False, "error": ...} has FAILED; never report it as success.
+                self._audit(name, args, "failed", task_id, provenance, result=json.dumps(result, ensure_ascii=False)[:300])
+                return ToolResult(False, output=result, error=str(result.get("error") or f"{name} did not succeed"),
+                                  duration_ms=elapsed, evidence=result.get("evidence"))
             self._audit(name, args, "ok", task_id, provenance, result=json.dumps(result, ensure_ascii=False)[:300])
             return ToolResult(True, output=result, duration_ms=elapsed,
                               evidence=result.get("evidence"))
