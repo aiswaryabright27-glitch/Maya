@@ -28,6 +28,7 @@ logger = logging.getLogger("maya")
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     settings = settings or Settings.from_environment()
+    gemini_model = settings.llm_model if settings.llm_model.startswith(("gemini-", "gemma-")) else "gemini-3.1-flash-lite"
 
     @asynccontextmanager
     async def lifespan(application: FastAPI):
@@ -43,11 +44,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     application.state.database_ready = False
     application.state.speech = GnaniProvider(settings.gnani_api_key.get_secret_value()) if settings.gnani_api_key else MockSpeechProvider()
     if settings.llm_provider == "gemini" and settings.gemini_api_key:
-        application.state.llm = GeminiProvider(settings.gemini_api_key.get_secret_value(), settings.llm_model)
+        application.state.llm = GeminiProvider(settings.gemini_api_key.get_secret_value(), gemini_model)
     elif settings.llm_provider == "openai" and settings.openai_api_key:
         application.state.llm = OpenAIResponsesProvider(settings.openai_api_key.get_secret_value(), settings.llm_model)
     elif settings.llm_provider == "auto" and settings.gemini_api_key:
-        application.state.llm = GeminiProvider(settings.gemini_api_key.get_secret_value(), settings.llm_model)
+        application.state.llm = GeminiProvider(settings.gemini_api_key.get_secret_value(), gemini_model)
     elif settings.llm_provider == "auto" and settings.openai_api_key:
         application.state.llm = OpenAIResponsesProvider(settings.openai_api_key.get_secret_value(), settings.llm_model)
     else:
