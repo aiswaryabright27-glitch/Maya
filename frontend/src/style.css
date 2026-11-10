@@ -1,0 +1,25 @@
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 28%,#19233a,#0b0d14 70%);color:#f2f5ff;font:15px system-ui,sans-serif;min-height:100vh;display:grid;place-items:center}main{text-align:center;width:min(560px,100%);padding:32px 26px 26px}.badge{position:fixed;top:18px;right:18px;color:#f4c574;background:#483416;border:1px solid #886a31;padding:7px 11px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.06em}h1{margin:0;font-size:28px}.sub{color:#bac4dc;font-size:12px;margin:8px 0 16px}.language,.sensitivity{display:flex;align-items:center;justify-content:center;gap:12px;color:#bfc8dd;font-size:12px;margin:12px auto}.language select{background:#171d2b;color:white;border:1px solid #414d69;border-radius:9px;padding:7px 12px}button{cursor:pointer;background:#6475cf;color:white;border:0;border-radius:12px;padding:11px 14px;margin:6px 4px;font-weight:600}button:disabled{opacity:.35;cursor:default}.secondary{background:#343c55}.push{display:block;margin:8px auto;width:calc(100% - 8px);background:#26334f;border:1px solid #52678b;touch-action:none}.controls{display:flex;justify-content:center;flex-wrap:wrap}.meter{appearance:none;display:block;width:calc(100% - 12px);height:5px;border:0;background:#20283b;border-radius:6px;margin:12px 6px}.meter::-webkit-progress-bar{background:#20283b;border-radius:6px}.meter::-webkit-progress-value{background:#56c9d5;border-radius:6px;transition:width .08s}.meter::-moz-progress-bar{background:#56c9d5;border-radius:6px}.privacy{font-size:11px;color:#9ca7bb;margin:11px 0}.active-privacy{color:#76edbd;font-weight:700}.note{font-size:11px;color:#969fb3;margin:12px auto}.transcript{text-align:left;background:#111722;border:1px solid #29334a;border-radius:12px;padding:12px 14px;margin-top:14px;min-height:62px}.transcript strong{font-size:11px;color:#94a7d1}.transcript pre{white-space:pre-wrap;font:13px/1.45 system-ui,sans-serif;margin:7px 0 0;color:#ecf0fa}.sensitivity input{width:140px}
+.sensitivity span{font-family:monospace;font-size:11px;color:#7ce3f0;min-width:32px;display:inline-block;text-align:right}
+.gate-status{font-size:11px;color:#8796b4;margin:4px 0 10px;transition:color .15s}
+.gate-status.voice-active{color:#5cf4b5;font-weight:700}
+.meter.voice-active::-webkit-progress-value{background:#5cf4b5}
+.meter.voice-active::-moz-progress-bar{background:#5cf4b5}
+
+.scene{position:relative;width:150px;height:120px;margin:12px auto 20px}
+.robot{position:absolute;left:50%;bottom:34px;width:62px;height:62px;margin-left:-31px;border-radius:50%;background:radial-gradient(circle at 33% 27%,#d6f8ff 0,#8bb4ff 12%,#7478ec 45%,#252a68 75%);box-shadow:0 0 42px #637dff66,inset -12px -17px 24px #101941;display:flex;align-items:center;justify-content:center;gap:9px;animation:hover 3.2s ease-in-out infinite;transition:box-shadow .2s}
+.robot::before{content:'';position:absolute;top:-15px;left:50%;width:4px;height:15px;margin-left:-2px;background:#8b96b8;border-radius:2px}
+.robot::after{content:'';position:absolute;top:-22px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#56c9d5;box-shadow:0 0 10px #56c9d5;animation:beacon 2.4s ease-in-out infinite}
+.eye{width:9px;height:13px;border-radius:5px;background:#eaf6ff;box-shadow:0 0 8px #bfe9ff;animation:blink 4.4s infinite}
+.mouth{position:absolute;bottom:15px;left:50%;width:16px;height:6px;margin-left:-8px;border-radius:4px;background:#101641;transition:width .12s}
+.desk{position:absolute;bottom:10px;left:50%;width:132px;height:15px;margin-left:-66px;border-radius:8px 8px 4px 4px;background:linear-gradient(#3a4666,#232b45);box-shadow:0 5px 0 #161c30,0 10px 18px #0008}
+.scene.listening .robot{box-shadow:0 0 65px #58dbe9aa,inset -12px -17px 24px #101941}
+.scene.listening .robot::after{background:#7dffce;box-shadow:0 0 12px #7dffce}
+.scene.thinking .eye{animation:think 1s ease-in-out infinite}
+.scene.talking .robot{animation:talk .48s ease-in-out infinite}
+.scene.talking .mouth{animation:talkmouth .24s ease-in-out infinite alternate}
+@keyframes hover{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes talk{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+@keyframes talkmouth{from{height:5px}to{height:12px}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.15)}}
+@keyframes think{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+@keyframes beacon{0%,100%{opacity:1}50%{opacity:.35}}
