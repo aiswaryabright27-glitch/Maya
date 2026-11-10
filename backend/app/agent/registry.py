@@ -99,11 +99,9 @@ class ToolRegistry:
                               evidence="validated only; nothing executed")
         start = time.perf_counter()
         try:
-            result = tool.handler(args)
+            result = await asyncio.wait_for(asyncio.to_thread(_call_sync, tool.handler, args), timeout=tool.timeout)
             if inspect.isawaitable(result):
                 result = await asyncio.wait_for(result, timeout=tool.timeout)
-            else:
-                result = await asyncio.wait_for(asyncio.to_thread(_call_sync, tool.handler, args), timeout=tool.timeout)
             if not isinstance(result, dict):
                 result = {"value": result}
             elapsed = (time.perf_counter() - start) * 1000

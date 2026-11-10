@@ -46,6 +46,26 @@ def test_registry_rejects_unknown_and_bad_args(tmp_path) -> None:
     asyncio.run(run())
 
 
+def test_registry_runs_sync_handler_once(tmp_path) -> None:
+    calls = 0
+
+    def handler(_args):
+        nonlocal calls
+        calls += 1
+        return {"ok": True}
+
+    audit = AuditLog(tmp_path / "audit.db")
+    registry = ToolRegistry(PermissionEngine(), audit)
+    registry.register(Tool("demo.once", "single invocation", {"type": "object", "properties": {}, "required": []}, handler))
+
+    async def run():
+        result = await registry.execute("demo.once", {})
+        assert result.ok is True
+
+    asyncio.run(run())
+    assert calls == 1
+
+
 def test_permission_engine_levels_and_confirmation(tmp_path) -> None:
     async def dangerous(_args):
         return {"done": True}
