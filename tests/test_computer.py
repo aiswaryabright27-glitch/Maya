@@ -57,6 +57,21 @@ def test_window_enumeration_is_read_only() -> None:
     assert foreground is None or {"hwnd", "title", "pid"} <= foreground.keys()
 
 
+def test_open_application_focuses_found_window(monkeypatch: pytest.MonkeyPatch) -> None:
+    class FakeWindow:
+        hwnd = 42
+        title = "Calculator"
+
+    monkeypatch.setattr(apps.subprocess, "Popen", lambda *_args, **_kwargs: None)
+    monkeypatch.setattr(apps.time, "sleep", lambda _seconds: None)
+    monkeypatch.setattr(apps, "find_window", lambda _query: FakeWindow())
+    monkeypatch.setattr(apps, "focus_window", lambda hwnd: hwnd == 42)
+
+    result = apps.open_application("calculator")
+    assert result["window_found"] == "Calculator"
+    assert result["focused"] is True
+
+
 @pytest.mark.skipif(
     os.environ.get("MAYA_LIVE_COMPUTER") != "1",
     reason="set MAYA_LIVE_COMPUTER=1 to launch Notepad and test dictation",

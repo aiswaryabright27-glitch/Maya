@@ -26,6 +26,7 @@ def make_stack(tmp_path):
 def test_router_classifies_commands() -> None:
     assert route("stop maya").kind == "stop"
     assert route("open notepad").tool == "apps.open"
+    assert route("opne notepad").tool == "apps.open"
     assert route("open https://example.com").args["url"] == "https://example.com"
     assert route("search the web for mango recipes").tool == "web.search"
     assert route("what is the time").tool == "system.time"

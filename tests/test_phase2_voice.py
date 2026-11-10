@@ -22,6 +22,10 @@ def test_detects_hinglish_and_manglish_romanized_samples() -> None:
     assert detect_language("Njan ivide aanu, sugam alle?", "en")[0] == "ml"
 
 
+def test_english_command_stays_english_in_auto_detection() -> None:
+    assert detect_language("opne notepad", "en")[0] == "en"
+
+
 def test_script_detection_and_unsupported_language_are_honest() -> None:
     assert detect_language("नमस्ते दोस्त", "en")[0] == "hi"
     language, message = route_language("ನಮಸ್ಕಾರ", supported=("en", "hi"))

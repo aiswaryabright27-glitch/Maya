@@ -32,8 +32,10 @@ def open_application(name: str) -> dict:
                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     time.sleep(0.8)
     window = find_window(target) or find_window(name)
+    focused = focus_window(window.hwnd) if window else False
     return {"launched": target, "window_found": window.title if window else None,
-            "evidence": f"start verb issued for '{target}'"}
+            "focused": focused,
+            "evidence": f"start verb issued for '{target}'; window_found={bool(window)}; focused={focused}"}
 
 
 def open_url(url: str) -> dict:

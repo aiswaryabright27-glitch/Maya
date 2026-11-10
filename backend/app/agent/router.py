@@ -13,7 +13,8 @@ STOP_RE = re.compile(r"^\s*(?:stop|stop maya|cancel|cancel that|nevermind|undo t
 OPEN_URL_RE = re.compile(r"^\s*(?:open|go to|visit)\s+(https?://\S+|www\.\S+)\s*$", re.I)
 OPEN_SITE_RE = re.compile(r"^\s*(?:open|go to)\s+(?:the\s+)?(?:website|site)\s+(?:of\s+)?([\w.-]+\.[a-z]{2,})\s*$", re.I)
 SEARCH_RE = re.compile(r"^\s*(?:search(?:\s+(?:the\s+)?web)?|google|look up|find online)\s+(?:for\s+)?(.+)$", re.I)
-OPEN_APP_RE = re.compile(r"^\s*open\s+(?:the\s+)?(?:app\s+)?([a-zA-Z][\w .-]{1,40}?)\s*$", re.I)
+# Speech recognition occasionally transposes adjacent letters in short commands.
+OPEN_APP_RE = re.compile(r"^\s*(?:open|opne)\s+(?:the\s+)?(?:app\s+)?([a-zA-Z][\w .-]{1,40}?)\s*$", re.I)
 TIME_RE = re.compile(r"^\s*(?:what(?:'s| is)\s+the\s+)?(?:time|date|day)\b", re.I)
 TASK_HINT_RE = re.compile(r"\b(?:then|after that|and also|first .+ then|step \d)\b", re.I)
 

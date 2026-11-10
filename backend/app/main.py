@@ -127,7 +127,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 # Text-based detection is authoritative: Indic script -> that language,
                 # Latin text -> romanized hints -> 'en'. The provider's detected
                 # language_code mislabels short commands, so it is not trusted here.
-                detected, _ = detect_language(transcript.text, preferred if preferred in LANGUAGES else "en")
+                detected, _ = detect_language(transcript.text, "en")
                 base_language = preferred if preferred in LANGUAGES else detected
                 if not transcript.text.strip():
                     fallback_msg = "Sorry, I didn't catch that. Please try again."
